@@ -1,0 +1,3 @@
+.popup__input-box_content_about {
+  margin-top: calc(30px - (var(--input-box-height) - 27px));
+}

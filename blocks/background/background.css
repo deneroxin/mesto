@@ -1,0 +1,5 @@
+.background {
+  margin: 0;
+  background: var(--color-background);
+  font-family: Inter, Arial, sans-serif;
+}

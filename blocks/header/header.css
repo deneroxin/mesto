@@ -1,0 +1,11 @@
+.header {
+  margin-top: 45px;
+  min-height: 74px;
+  border-bottom: 2px solid var(--color-dim);
+}
+
+@media (max-width: 422px) {
+  .header {
+    min-height: calc(100vw * 56 / 320);
+  }
+}
