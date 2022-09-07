@@ -8,3 +8,12 @@
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
   color: var(--color-text-dark);
 }
+
+.popup__input-box:focus {
+  outline: 2px solid var(--color-dim);
+  border-radius: 2px;
+}
+
+.popup__input-box:last-of-type {
+  margin-top: calc(30px - (var(--input-box-height) - 27px));
+}

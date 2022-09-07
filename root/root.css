@@ -4,5 +4,6 @@
   --color-text-bright: white;
   --color-text-dark: black;
   --color-dim: #545454;
+  --color-dim-transparent: rgba(84, 84, 84, .7);
   --color-popup: rgba(0,0,0,.5);
 }

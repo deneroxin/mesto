@@ -16,7 +16,7 @@
 
 @media (max-width: 480px) {
   .popup__save-button {
-    height: 46px;
+    min-height: 46px; /* высоту кнопки перепроверил, действительно 46px, проверял на PixelPerfect, изображения совпали (шаблон диалогового окна получил путём экспорта его из Фигмы в png в масштабе 1x) */
     margin: 45px 0 25px;
     line-height: 17px;
     font-size: 14px;

@@ -1,34 +1,30 @@
 let profileSection = document.querySelector('.profile');
-let editButton = profileSection.querySelector('.profile__edit-button');
-/*
-Следующие ссылки я решил инициализировать глобально, а не внутри обработчиков событий,
-чтобы браузеру не искать элемент всякий раз заново при наступлении события.
-Раз мы не используем в проекте innerHTML и подобные ему средства, провоцирующие перестройку DOM,
-ссылки должны оставаться валидными на протяжение всего сеанса взаимодействия со страницей.
-*/
-let popup = document.querySelector('.popup');
-let formElement = popup.querySelector('form'); /* вдруг мы припишем класс "popup__container" оболочке для формы, а не самой форме, если дизайн усложнится */
-let closeButton = popup.querySelector('.popup__close-button');
+let profileEditButton = profileSection.querySelector('.profile__edit-button');
+let popupEditProfile = document.querySelector('.popup');
+let popupEditProfileForm = popupEditProfile.querySelector('.popup__form');
+let popupEditProfileCloseButton = popupEditProfile.querySelector('.popup__close-button');
 let profileName = profileSection.querySelector('.profile__name');
 let profileAbout = profileSection.querySelector('.profile__about');
-let popupName = popup.querySelector('.popup__input-box_content_name');
-let popupAbout = popup.querySelector('.popup__input-box_content_about');
+let popupEditProfileName = popupEditProfileForm.querySelector('.popup__input-box_content_name');
+let popupEditProfileAbout = popupEditProfileForm.querySelector('.popup__input-box_content_about');
 
-editButton.addEventListener('click', function() {
-  popup.classList.add('popup_opened');
-  popupName.value = profileName.textContent;
-  popupAbout.value = profileAbout.textContent;
-});
-
-function closePopup() {
-  popup.classList.remove('popup_opened');
+function openPopupEditProfile() {
+  popupEditProfileName.value = profileName.textContent;
+  popupEditProfileAbout.value = profileAbout.textContent;
+  popupEditProfile.classList.add('popup_opened');
 }
 
-closeButton.addEventListener('click', closePopup);
+function closePopupEditProfile() {
+  popupEditProfile.classList.remove('popup_opened');
+}
 
-formElement.addEventListener('submit', function(evt) {
-  evt.preventDefault();
-  profileName.textContent = popupName.value;
-  profileAbout.textContent = popupAbout.value;
-  closePopup();
-});
+function submitPopupEditProfile(event) {
+  event.preventDefault();
+  profileName.textContent = popupEditProfileName.value;
+  profileAbout.textContent = popupEditProfileAbout.value;
+  closePopupEditProfile();
+}
+
+profileEditButton.addEventListener('click', openPopupEditProfile);
+popupEditProfileCloseButton.addEventListener('click', closePopupEditProfile);
+popupEditProfileForm.addEventListener('submit', submitPopupEditProfile);
