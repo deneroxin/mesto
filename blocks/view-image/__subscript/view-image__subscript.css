@@ -1,6 +1,6 @@
 .view-image__subscript {
   position: absolute;
-  bottom: calc(-10x - 15px);
+  bottom: calc(-10px - 15px);
   left: 0;
   margin: 0;
   line-height: 15px;
