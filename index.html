@@ -26,49 +26,19 @@
           <button type="button" class="interactive profile__add-button" aria-label="Добавить"></button>
         </section>
         <section class="elements" aria-label="Места">
+          <template id="card">
+            <li class="card">
+              <div class="card__image">
+                <button type="button" class="interactive card__remove-button" aria-label="Удалить место"></button>
+              </div>
+              <div class="card__footer">
+                <h2 class="card__subscript"></h2>
+                <button type="button" class="interactive card__like-button" aria-label="Поставить лайк"></button>
+              </div>
+            </li>
+          </template>
           <ul class="elements__cards">
-            <li class="card">
-              <img class="card__image" src="blocks/elements/gora-beluha.jpg" alt="Озеро на фоне горы">
-              <div class="card__footer">
-                <h2 class="card__subscript">Гора Белуха, Алтай</h2>
-                <button type="button" class="interactive card__like-button" aria-label="Поставить лайк"></button>
-              </div>
-            </li>
-            <li class="card">
-              <img class="card__image" src="blocks/elements/karachaevsk.jpg" alt="Полуразрушенная мечеть на горе">
-              <div class="card__footer">
-                <h2 class="card__subscript">Карачаевск</h2>
-                <button type="button" class="interactive card__like-button" aria-label="Поставить лайк"></button>
-              </div>
-            </li>
-            <li class="card">
-              <img class="card__image" src="blocks/elements/elbrus.jpg" alt="Гора вдалеке">
-              <div class="card__footer">
-                <h2 class="card__subscript">Гора Эльбрус</h2>
-                <button type="button" class="interactive card__like-button" aria-label="Поставить лайк"></button>
-              </div>
-            </li>
-            <li class="card">
-              <img class="card__image" src="blocks/elements/dombai.jpg" alt="Гора в снегу, сосны">
-              <div class="card__footer">
-                <h2 class="card__subscript">Домбай</h2>
-                <button type="button" class="interactive card__like-button" aria-label="Поставить лайк"></button>
-              </div>
-            </li>
-            <li class="card">
-              <img class="card__image" src="blocks/elements/karelia-ruskeala.jpg" alt="Озеро, отвесный каменный берег, хвойные деревья наверху">
-              <div class="card__footer">
-                <h2 class="card__subscript">Рускеала &mdash; горный парк в Карелии</h2>
-                <button type="button" class="interactive card__like-button" aria-label="Поставить лайк"></button>
-              </div>
-            </li>
-            <li class="card">
-              <img class="card__image" src="blocks/elements/lovozerskie-tundry.jpg" alt="Чистое озеро на фоне горы и осеннего леса">
-              <div class="card__footer">
-                <h2 class="card__subscript">Ловозерские тундры</h2>
-                <button type="button" class="interactive card__like-button" aria-label="Поставить лайк"></button>
-              </div>
-            </li>
+
           </ul>
         </section>
       </main>
@@ -77,17 +47,23 @@
       </footer>
     </div>
 
-    <div class="popup">
+    <div class="cover-window popup" hidden>
       <div class="popup__container">
-        <h2 class="popup__title">Редактировать профиль</h2>
-        <form class="popup__form" name="edit-profile">
-          <input type="text" class="popup__input-box popup__input-box_content_name"
-            name="name" aria-label="Имя" required>
-          <input type="text" class="popup__input-box popup__input-box_content_about"
-            name="about" aria-label="О себе" required>
+        <h2 class="popup__title"></h2>
+        <form class="popup__form" name="?">
+          <input type="text" class="popup__input-box popup__input-box_content_name" name="name" required>
+          <input type="text" class="popup__input-box popup__input-box_content_data" name="data" required>
           <button type="submit" class="interactive popup__save-button">Сохранить</button>
         </form>
-        <button type="button" class="interactive popup__close-button" aria-label="Закрыть форму"></button>
+        <button type="button" class="interactive close-button" aria-label="Закрыть форму"></button>
+      </div>
+    </div>
+
+    <div class="cover-window view-image" hidden>
+      <div class="view-image__container">
+        <img class="view-image__image" src="?" alt="?">
+        <h2 class="view-image__subscript"></h2>
+        <button type="button" class="interactive close-button" aria-label="Закрыть просмотр"></button>
       </div>
     </div>
 

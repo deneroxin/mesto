@@ -1,0 +1,10 @@
+.view-image__subscript {
+  position: absolute;
+  bottom: calc(-10x - 15px);
+  left: 0;
+  margin: 0;
+  line-height: 15px;
+  font-size: 12px;
+  font-weight: normal;
+  color: var(--color-text-bright);
+}

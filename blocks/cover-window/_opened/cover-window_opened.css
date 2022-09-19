@@ -1,0 +1,5 @@
+.cover-window_opened {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity .5s ease;
+}

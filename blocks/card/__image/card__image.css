@@ -1,5 +1,7 @@
 .card__image {
+  position: relative;
   width: 100%; /*282px;*/
-  height: auto; /*282px;*/
-  object-fit: cover;
+  padding-top: 100%;
+  background-size: cover;
+  cursor: pointer;
 }
