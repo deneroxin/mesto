@@ -26,20 +26,11 @@
           <button type="button" class="interactive profile__add-button" aria-label="Добавить"></button>
         </section>
         <section class="elements" aria-label="Места">
-          <template id="card">
-            <li class="card">
-              <div class="card__image">
-                <button type="button" class="interactive card__remove-button" aria-label="Удалить место"></button>
-              </div>
-              <div class="card__footer">
-                <h2 class="card__subscript"></h2>
-                <button type="button" class="interactive card__like-button" aria-label="Поставить лайк"></button>
-              </div>
-            </li>
-          </template>
           <ul class="elements__cards">
 
           </ul>
+          <img class="elements__empty-indicator elements__empty-indicator_hidden"
+            src="./blocks/elements/__empty-indicator/elements__empty-indicator.jpg" alt="Нет карточек">
         </section>
       </main>
       <footer class="footer">
@@ -47,26 +38,55 @@
       </footer>
     </div>
 
-    <div class="cover-window popup" hidden>
-      <div class="popup__container">
-        <h2 class="popup__title"></h2>
-        <form class="popup__form" name="?">
-          <input type="text" class="popup__input-box popup__input-box_content_name" name="name" required>
-          <input type="text" class="popup__input-box popup__input-box_content_data" name="data" required>
+    <div class="popup popup_type_edit-profile" hidden>
+      <div class="popup__container popup__container_type_dialog">
+        <h2 class="popup__title">Редактировать профиль</h2>
+        <form class="popup__form" name="edit-profile">
+          <input type="text" class="popup__input-box popup__input-box_content_name"
+            name="name" aria-label="Имя" placeholder="Имя" required>
+          <input type="text" class="popup__input-box popup__input-box_content_about"
+            name="about" aria-label="О себе" placeholder="О себе" required>
           <button type="submit" class="interactive popup__save-button">Сохранить</button>
         </form>
-        <button type="button" class="interactive close-button" aria-label="Закрыть форму"></button>
+        <button type="button" class="interactive popup__close-button" aria-label="Закрыть форму"></button>
       </div>
     </div>
 
-    <div class="cover-window view-image" hidden>
-      <div class="view-image__container">
-        <img class="view-image__image" src="?" alt="?">
-        <h2 class="view-image__subscript"></h2>
-        <button type="button" class="interactive close-button" aria-label="Закрыть просмотр"></button>
+    <div class="popup popup_type_add-card" hidden>
+      <div class="popup__container popup__container_type_dialog">
+        <h2 class="popup__title">Новое место</h2>
+        <form class="popup__form" name="add-card">
+          <input type="text" class="popup__input-box popup__input-box_content_name"
+            name="name" aria-label="Название" placeholder="Название" required>
+          <input type="text" class="popup__input-box popup__input-box_content_link"
+            name="link" aria-label="Ссылка на картинку" placeholder="Ссылка на картинку" required>
+          <button type="submit" class="interactive popup__save-button">Сохранить</button>
+        </form>
+        <button type="button" class="interactive popup__close-button" aria-label="Закрыть форму"></button>
       </div>
     </div>
 
+    <div class="popup popup_type_view-card" hidden>
+      <div class="popup__container">
+        <img class="popup__image" src="?" alt="?">
+        <h2 class="popup__subscript"></h2>
+        <button type="button" class="interactive popup__close-button" aria-label="Закрыть просмотр"></button>
+      </div>
+    </div>
+
+    <template id="card">
+      <li class="card">
+        <div class="card__image">
+          <button type="button" class="interactive card__remove-button" aria-label="Удалить место"></button>
+        </div>
+        <div class="card__footer">
+          <h2 class="card__subscript"></h2>
+          <button type="button" class="interactive card__like-button" aria-label="Поставить лайк"></button>
+        </div>
+      </li>
+    </template>
+
+    <script src="script/cards.js"></script>
     <script src="script/index.js"></script>
 
   </body>
