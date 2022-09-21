@@ -7,6 +7,7 @@
   border: none;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
   color: var(--color-text-dark);
+  background: var(--color-white);
 }
 
 .popup__input-box:focus {
