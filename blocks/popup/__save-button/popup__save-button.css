@@ -5,19 +5,19 @@
   min-height: 50px;
   background-color: var(--color-background);
   color: var(--color-text-bright);
-  margin: 48px 0 37px;
+  margin: 18px 0 37px;
   line-height: 22px;
   font-size: 18px;
 }
 
 .popup__save-button:hover {
-  opacity: 0.8; /* Переопределяем общий для всех интерактивных элементов opacity на индивидуальный */
+  opacity: 0.8;
 }
 
 @media (max-width: 480px) {
   .popup__save-button {
     min-height: 46px;
-    margin: 45px 0 25px;
+    margin: 12px 0 25px;
     line-height: 17px;
     font-size: 14px;
   }

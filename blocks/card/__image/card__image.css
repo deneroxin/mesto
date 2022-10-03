@@ -1,6 +1,6 @@
 .card__image {
   position: relative;
-  width: 100%; /*282px;*/
+  width: 100%;
   padding-top: 100%;
   background-size: cover;
   cursor: pointer;

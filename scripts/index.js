@@ -1,10 +1,11 @@
 const profileSection = document.querySelector('.profile');
 const elements = document.querySelector('.elements');
-const elementsCardTemplate = document.querySelector('template#card').content;
+const elementsCardTemplate = document.querySelector('template#card').content.querySelector('.card');
 const popupEditProfile = document.querySelector('.popup_type_edit-profile');
 const popupAddCard = document.querySelector('.popup_type_add-card');
 const popupViewCard = document.querySelector('.popup_type_view-card');
-const buttonsClosePopup = document.querySelectorAll('.popup__close-button');
+const popupCloseButtons = document.querySelectorAll('.popup__close-button');
+const popupOverlays = document.querySelectorAll('.popup');
 const profileEditButton = profileSection.querySelector('.profile__edit-button');
 const profileAddButton = profileSection.querySelector('.profile__add-button');
 const elementsCards = elements.querySelector('.elements__cards');
@@ -82,6 +83,7 @@ function handleCardLikeButtonClick(evt) {
 function handleProfileEditButtonClick() {
   popupEditProfileInputName.value = profileName.textContent;
   popupEditProfileInputAbout.value = profileAbout.textContent;
+  validateAllInputs(popupEditProfileForm);
   openPopup(popupEditProfile);
 }
 
@@ -90,6 +92,7 @@ function handleProfileAddButtonClick() {
     popupAddCardForm.reset();
     popupAddCard.submitted = false;
   }
+  validateSubmitButton(popupAddCardForm);
   openPopup(popupAddCard);
 }
 
@@ -115,15 +118,34 @@ function handlePopupAddCardFormSubmit(evt) {
 }
 
 function openPopup(element) {
+  element.mousePushed = false;
   element.classList.add('popup_opened');
+  element.handleKeydown = evt => {if (evt.key === 'Escape') closePopup(element)};
+  window.addEventListener('keydown', element.handleKeydown);
 }
 
+/*
+Событие клавиатуры навешивается на window, так как popup с картинкой не будет на него
+реагировать, потому что в нём нет элементов, умеющих слушать события клавиатуры.
+Кроме этого, для диалогового окна нужно, чтобы какое-то из полей <input> было в фокусе,
+чтобы сработало событие нажатия, а это неудобно.
+*/
+
 function closePopup(element) {
+  window.removeEventListener('keydown', element.handleKeydown);
   element.classList.remove('popup_opened');
 }
 
 function handlePopupCloseButtonClick(evt) {
-  closePopup(evt.target.closest('.popup'));
+  closePopup(this.closest('.popup'));
+}
+
+function handlePopupOverlayMouseDown(evt) {
+  if (evt.target === this) this.mousePushed = true;
+}
+
+function handlePopupOverlayMouseUp(evt) {
+  if (evt.target === this && this.mousePushed) closePopup(this);
 }
 
 initializeCards();
@@ -132,4 +154,34 @@ profileEditButton.addEventListener('click', handleProfileEditButtonClick);
 profileAddButton.addEventListener('click', handleProfileAddButtonClick);
 popupEditProfileForm.addEventListener('submit', handlePopupEditProfileFormSubmit);
 popupAddCardForm.addEventListener('submit', handlePopupAddCardFormSubmit);
-buttonsClosePopup.forEach((button) => button.addEventListener('click', handlePopupCloseButtonClick));
+popupCloseButtons.forEach(element => element.addEventListener('click', handlePopupCloseButtonClick));
+popupOverlays.forEach(element => {
+  element.addEventListener('mousedown', handlePopupOverlayMouseDown);
+  element.addEventListener('mouseup', handlePopupOverlayMouseUp);
+});
+
+/*
+Клик по оверлею пришлось иммитировать через нажатие и отпускание,
+так как в противном случае браузер считает кликом ситуацию, когда
+клавиша была нажата на оверлее, затем курсор был перемещен в область окна,
+после чего клавиша была отпущена; или наоборот, если нажать клавишу
+внутри окна, переместить курсор за его пределы и там отпустить - срабатывает "клик".
+Браузер не может следить, чтобы и нажатие, и отпускание возникли оба за пределами окна,
+он лишь следит, что нажатие и отпускание происходят на одном том же элементе,
+поэтому если хотя бы одна из фаз (нажатие или отпускание) сработала на оверлее,
+браузер почему-то считает, что весь "клик" произошёл на оверлее.
+(Хотя странно, что выбор целевого объекта не определяется лишь фазой отпускания)
+Как вариант, можно было бы навесить слушатель-заглушку на само окно,
+в котором прописать evt.stopPropagation()
+чтобы при клике по окну событие не достигло своего приёмника - оверлея.
+Однако это всё равно не помогает при неконсистентных кликах.
+*/
+
+enableValidation({
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input-box',
+  submitButtonSelector: '.popup__save-button',
+  inactiveButtonClass: 'popup__save-button_disabled',
+  inputErrorClass: 'popup__input-box_error',
+  errorClass: 'popup__error_visible'
+})
