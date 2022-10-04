@@ -1,3 +1,12 @@
+const validationObject = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input-box',
+  submitButtonSelector: '.popup__save-button',
+  inactiveButtonClass: 'popup__save-button_disabled',
+  inputErrorClass: 'popup__input-box_error',
+  errorClass: 'popup__error_visible'
+};
+
 const profileSection = document.querySelector('.profile');
 const elements = document.querySelector('.elements');
 const elementsCardTemplate = document.querySelector('template#card').content.querySelector('.card');
@@ -36,8 +45,6 @@ function clearEmptyIndicator() {
     elementsCards.empty = false;
   }
 }
-
-function stripURL(string) { return string.slice(5, -2); }
 
 function createCard(data) {
   const newElement = elementsCardTemplate.cloneNode(true);
@@ -81,9 +88,11 @@ function handleCardLikeButtonClick(evt) {
 }
 
 function handleProfileEditButtonClick() {
+  const popupEditProfileInputs = [popupEditProfileInputName, popupEditProfileInputAbout];
   popupEditProfileInputName.value = profileName.textContent;
   popupEditProfileInputAbout.value = profileAbout.textContent;
-  validateAllInputs(popupEditProfileForm);
+  validateAllInputs(popupEditProfileForm, popupEditProfileInputs, validationObject);
+  validateSubmitButton(popupEditProfileInputs, popupEditProfileSubmit, validationObject);
   openPopup(popupEditProfile);
 }
 
@@ -92,7 +101,7 @@ function handleProfileAddButtonClick() {
     popupAddCardForm.reset();
     popupAddCard.submitted = false;
   }
-  validateSubmitButton(popupAddCardForm);
+  validateSubmitButton([popupAddCardInputName, popupAddCardInputLink], popupAddCardSubmit, validationObject);
   openPopup(popupAddCard);
 }
 
@@ -124,13 +133,6 @@ function openPopup(element) {
   window.addEventListener('keydown', element.handleKeydown);
 }
 
-/*
-Событие клавиатуры навешивается на window, так как popup с картинкой не будет на него
-реагировать, потому что в нём нет элементов, умеющих слушать события клавиатуры.
-Кроме этого, для диалогового окна нужно, чтобы какое-то из полей <input> было в фокусе,
-чтобы сработало событие нажатия, а это неудобно.
-*/
-
 function closePopup(element) {
   window.removeEventListener('keydown', element.handleKeydown);
   element.classList.remove('popup_opened');
@@ -160,28 +162,4 @@ popupOverlays.forEach(element => {
   element.addEventListener('mouseup', handlePopupOverlayMouseUp);
 });
 
-/*
-Клик по оверлею пришлось иммитировать через нажатие и отпускание,
-так как в противном случае браузер считает кликом ситуацию, когда
-клавиша была нажата на оверлее, затем курсор был перемещен в область окна,
-после чего клавиша была отпущена; или наоборот, если нажать клавишу
-внутри окна, переместить курсор за его пределы и там отпустить - срабатывает "клик".
-Браузер не может следить, чтобы и нажатие, и отпускание возникли оба за пределами окна,
-он лишь следит, что нажатие и отпускание происходят на одном том же элементе,
-поэтому если хотя бы одна из фаз (нажатие или отпускание) сработала на оверлее,
-браузер почему-то считает, что весь "клик" произошёл на оверлее.
-(Хотя странно, что выбор целевого объекта не определяется лишь фазой отпускания)
-Как вариант, можно было бы навесить слушатель-заглушку на само окно,
-в котором прописать evt.stopPropagation()
-чтобы при клике по окну событие не достигло своего приёмника - оверлея.
-Однако это всё равно не помогает при неконсистентных кликах.
-*/
-
-enableValidation({
-  formSelector: '.popup__form',
-  inputSelector: '.popup__input-box',
-  submitButtonSelector: '.popup__save-button',
-  inactiveButtonClass: 'popup__save-button_disabled',
-  inputErrorClass: 'popup__input-box_error',
-  errorClass: 'popup__error_visible'
-})
+enableValidation(validationObject);
