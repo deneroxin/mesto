@@ -147,7 +147,10 @@ function handlePopupOverlayMouseDown(evt) {
 }
 
 function handlePopupOverlayMouseUp(evt) {
-  if (evt.target === this && this.mousePushed) closePopup(this);
+  if (evt.target === this && this.mousePushed) {
+    closePopup(this);
+  }
+  this.mousePushed = false;
 }
 
 initializeCards();
