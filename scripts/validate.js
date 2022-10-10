@@ -26,7 +26,7 @@ function isInputListValid(inputList) {
   return inputList.every(inputElement => inputElement.checkValidity());
 }
 
-function validateSubmitButton(inputList, submitButton, validationObject) {
+export function validateSubmitButton(inputList, submitButton, validationObject) {
   if (isInputListValid(inputList)) {
     activateSubmitButton(submitButton, validationObject);
   } else {
@@ -42,7 +42,7 @@ function validateInput(formElement, inputElement, validationObject) {
   }
 }
 
-function validateAllInputs(formElement, inputList, validationObject) {
+export function validateAllInputs(formElement, inputList, validationObject) {
   inputList.forEach(inputElement => validateInput(formElement, inputElement, validationObject));
 }
 
@@ -55,7 +55,7 @@ function enableFormValidation(formElement, validationObject) {
   }));
 }
 
-function enableValidation(validationObject) {
+export function enableValidation(validationObject) {
   const formList = Array.from(document.querySelectorAll(validationObject.formSelector));
   formList.forEach(formElement => enableFormValidation(formElement, validationObject));
 }

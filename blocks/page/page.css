@@ -1,13 +1,5 @@
 .page {
   margin: 0 auto;
-  width: 880px;
+  width: calc(282px + (100vw - 320px) * (880 - 282) / (1023 - 320));
+  max-width: 880px;
 }
-
-@media (max-width: 1023px) {  /* добиться, чтобы на 1024 было еще 3 колонки */
-  .page {
-    width: calc(282px + (100vw - 320px) * (880 - 282) / (1023 - 320));
-  }
-}
-
-
-

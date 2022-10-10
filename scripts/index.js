@@ -1,3 +1,8 @@
+import {validateSubmitButton} from './validate.js';
+import {validateAllInputs} from './validate.js';
+import {enableValidation} from './validate.js';
+import {initialCards} from './cards.js';
+
 const validationObject = {
   formSelector: '.popup__form',
   inputSelector: '.popup__input-box',
@@ -147,9 +152,7 @@ function handlePopupOverlayMouseDown(evt) {
 }
 
 function handlePopupOverlayMouseUp(evt) {
-  if (evt.target === this && this.mousePushed) {
-    closePopup(this);
-  }
+  if (evt.target === this && this.mousePushed) closePopup(this);
   this.mousePushed = false;
 }
 
