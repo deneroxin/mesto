@@ -12,6 +12,8 @@ const validationObject = {
   errorClass: 'popup__error_visible'
 };
 
+const noImage = '../blocks/elements/__empty-indicator/elements__empty-indicator.jpg';
+
 const profileSection = document.querySelector('.profile');
 const elements = document.querySelector('.elements');
 const elementsCardTemplate = document.querySelector('template#card').content.querySelector('.card');
@@ -54,7 +56,7 @@ function clearEmptyIndicator() {
 function createCard(data) {
   const newElement = elementsCardTemplate.cloneNode(true);
   const newElementImage = newElement.querySelector('.card__image');
-  newElementImage.style.backgroundImage = `url(${data.link})`;
+  newElementImage.style.backgroundImage = `url(${data.link}), url(${noImage})`;
   newElementImage.addEventListener('click', (evt) => openPopupViewCard (data));
   newElement.querySelector('.card__subscript').textContent = data.name;
   newElement.querySelector('.card__remove-button').addEventListener('click', handleCardRemoveButtonClick);
