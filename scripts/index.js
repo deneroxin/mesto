@@ -1,7 +1,6 @@
-import {validateSubmitButton} from './validate.js';
-import {validateAllInputs} from './validate.js';
-import {enableValidation} from './validate.js';
-import {initialCards} from './cards.js';
+import {initialCards} from './initialCards.js';
+import {Card} from './Card.js';
+import {FormValidator} from './FormValidator.js';
 
 const validationObject = {
   formSelector: '.popup__form',
@@ -12,11 +11,10 @@ const validationObject = {
   errorClass: 'popup__error_visible'
 };
 
-const noImage = '../blocks/elements/__empty-indicator/elements__empty-indicator.jpg';
+export const noImage = '../blocks/elements/__empty-indicator/elements__empty-indicator.jpg';
 
 const profileSection = document.querySelector('.profile');
 const elements = document.querySelector('.elements');
-const elementsCardTemplate = document.querySelector('template#card').content.querySelector('.card');
 const popupEditProfile = document.querySelector('.popup_type_edit-profile');
 const popupAddCard = document.querySelector('.popup_type_add-card');
 const popupViewCard = document.querySelector('.popup_type_view-card');
@@ -32,14 +30,14 @@ const popupEditProfileForm = popupEditProfile.querySelector('.popup__form');
 const popupAddCardForm = popupAddCard.querySelector('.popup__form');
 const popupEditProfileInputName = popupEditProfileForm.querySelector('.popup__input-box_content_name');
 const popupEditProfileInputAbout = popupEditProfileForm.querySelector('.popup__input-box_content_about');
-const popupEditProfileSubmit = popupEditProfileForm.querySelector('.popup__save-button');
 const popupAddCardInputName = popupAddCardForm.querySelector('.popup__input-box_content_name');
 const popupAddCardInputLink = popupAddCardForm.querySelector('.popup__input-box_content_link');
-const popupAddCardSubmit = popupAddCardForm.querySelector('.popup__save-button');
 const popupViewCardImage = popupViewCard.querySelector('.popup__image');
 const popupViewCardSubscript = popupViewCard.querySelector('.popup__subscript');
 
-function setEmptyIndicator() {
+const cards = [];
+
+export function setEmptyIndicator() {
   if (!elementsCards.children.length) {
     elementsCards.empty = true;
     elementEmptyIndicator.classList.remove('elements__empty-indicator_hidden');
@@ -53,53 +51,36 @@ function clearEmptyIndicator() {
   }
 }
 
-function createCard(data) {
-  const newElement = elementsCardTemplate.cloneNode(true);
-  const newElementImage = newElement.querySelector('.card__image');
-  newElementImage.style.backgroundImage = `url(${data.link}), url(${noImage})`;
-  newElementImage.addEventListener('click', (evt) => openPopupViewCard (data));
-  newElement.querySelector('.card__subscript').textContent = data.name;
-  newElement.querySelector('.card__remove-button').addEventListener('click', handleCardRemoveButtonClick);
-  newElement.querySelector('.card__like-button').addEventListener('click', handleCardLikeButtonClick);
-  return newElement;
+export function removeCardInstance(card) {
+  const i = card.getMyIndex(); //Узнаём индекс удаляемого элемента в массиве (это ведь быстрее, чем искать элемент по значению)
+  cards[i] = cards.pop();  //Ставим последний элемент массива на место удаляемого элемента (затёрли ссылку на него)
+  cards[i].setMyIndex(i);  //Обновляем поле "индекс" перемещённому элементу в соответствии с новым положением
+  //Теперь сборщику мусора можно съедать экземпляр объекта Card, на который не осталось ссылок.
+  //Такой способ мне НЕ нравится.
+  //Почему бы не хранить ссылку на объект Card в самом DOM элементе, добвив ему кастомное свойство?
+  //Ведь тогда при удалении элемента из DOM, автоматически удалится и связанный с ним экземпляр класса Card.
+  //Не нужно будет массива, не нужно будет функции removeCardInstance.
+  //(! А может просто не создавать массив и положиться на те самые анонимные обработчики?
+  // С удалением DOM элемента, они также все удалятся, и сслылок на экземпляр Card не останется?)
 }
 
 function renderCard(data) {
   clearEmptyIndicator();
-  elementsCards.prepend(createCard(data));
+  const card = new Card(data, 'template.card-template');
+  card.setMyIndex(cards.length);  //Запоминаем индекс элемента в массиве, чтобы находить его сразу, не используя indexOf.
+  cards.push(card); //Запоминаем ссылку на созданную карточку, чтобы сборщик мусора её не съел.
+  elementsCards.prepend(card.createCardElement()); // (Хотя он и так не ест, но лишь потому наверное, что анонимные обработчики неявно содержат ссылку на карточку в параметре this)
 }
 
 function initializeCards() {
   initialCards.forEach(renderCard);
 }
 
-function handleCardRemoveButtonClick(evt) {
-  evt.stopPropagation(); /* щелчок по корзине является и щелчком по изображению, предотвратить вызов просмотра */
-  const card = evt.target.closest('.card');
-  card.classList.add('card_removed');
-  card.exists = true;
-  card.addEventListener('transitionend', removeCardCompletely); /* setTimeout проще, но тогда придётся поддерживать единообразие значений времени здесь и в анимации */
-}
-
-function removeCardCompletely(evt) {
-  const card = evt.target;   /* так как все анимации одной длительности, будем реагировать на первое попавшееся свойство */
-  if (card.exists) {        /* если объекта уже нет, то card.exists === undefined, а это false (хотя как тогда событие сработает на несуществующем объекте? Но кто знает - вдруг такое возможно!) */
-    card.exists = false;   /* гарантирует, что повторное событие не будет обрабатываться, если объект не успел удалиться */
-    card.remove();        /* remove() не удаляет объект немедленно, событие успевает прийти повторно, причем порядок свойств может быть любым */
-    setEmptyIndicator();
-  }
-}
-
-function handleCardLikeButtonClick(evt) {
-  evt.target.classList.toggle('card__like-button_active');
-}
-
 function handleProfileEditButtonClick() {
-  const popupEditProfileInputs = [popupEditProfileInputName, popupEditProfileInputAbout];
   popupEditProfileInputName.value = profileName.textContent;
   popupEditProfileInputAbout.value = profileAbout.textContent;
-  validateAllInputs(popupEditProfileForm, popupEditProfileInputs, validationObject);
-  validateSubmitButton(popupEditProfileInputs, popupEditProfileSubmit, validationObject);
+  editProfileValidator.validateAllInputs();
+  editProfileValidator.setSubmitButtonState();
   openPopup(popupEditProfile);
 }
 
@@ -108,14 +89,14 @@ function handleProfileAddButtonClick() {
     popupAddCardForm.reset();
     popupAddCard.submitted = false;
   }
-  validateSubmitButton([popupAddCardInputName, popupAddCardInputLink], popupAddCardSubmit, validationObject);
+  addCardValidator.setSubmitButtonState();
   openPopup(popupAddCard);
 }
 
-function openPopupViewCard(cardData) {
-  popupViewCardImage.src = cardData.link;
-  popupViewCardImage.alt = cardData.name;
-  popupViewCardSubscript.textContent = cardData.name;
+export function openPopupViewCard(card) {
+  popupViewCardImage.src = card.getLink();
+  popupViewCardImage.alt = card.getName();
+  popupViewCardSubscript.textContent = card.getName();
   openPopup(popupViewCard);
 }
 
@@ -133,7 +114,7 @@ function handlePopupAddCardFormSubmit(evt) {
   closePopup(popupAddCard);
 }
 
-function openPopup(element) {
+export function openPopup(element) {
   element.mousePushed = false;
   element.classList.add('popup_opened');
   element.handleKeydown = evt => {if (evt.key === 'Escape') closePopup(element)};
@@ -170,4 +151,7 @@ popupOverlays.forEach(element => {
   element.addEventListener('mouseup', handlePopupOverlayMouseUp);
 });
 
-enableValidation(validationObject);
+const editProfileValidator = new FormValidator(validationObject, popupEditProfileForm);
+const addCardValidator = new FormValidator(validationObject, popupAddCardForm);
+editProfileValidator.enableValidation();
+addCardValidator.enableValidation();
