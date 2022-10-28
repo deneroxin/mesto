@@ -1,25 +1,22 @@
-import {noImage, setEmptyIndicator} from './index.js';
-import {openPopupViewCard} from './index.js';
-import {removeCardInstance} from './index.js'; //Функция, которую надо вызвать, чтобы удалить экземпляр объекта Card
-
 export class Card {
-  constructor(data, templateSelector) {
+  constructor(data, templateSelector, externalObjects) {
     this._templateSelector = templateSelector;
-    this._name = data.name;
-    this._link = data.link;
+    this._data = data;
     this._isLiked = false;
+    this._external = externalObjects;
   }
 
-  getMyIndex() { return this._index; }
-
-  setMyIndex(index) { this._index = index; }
-
-  getName() { return this._name; }
-
-  getLink() { return this._link; }
-
   _buildImageURL(link)  {
-    return `url(${link}), url(${noImage})`;
+    return `url(${link}), url(${this._external.noImage})`;
+  }
+
+  _addEventListeners(image) {
+    image.addEventListener('click', () => this._external.handleCardClick(this._data));
+    this._cardElement.querySelector('.card__subscript').textContent = this._data.name;
+    this._cardElement.querySelector('.card__remove-button')
+      .addEventListener('click', evt => this._handleCardRemoveButtonClick(evt));
+    this._cardElement.querySelector('.card__like-button')
+      .addEventListener('click', evt => this._handleCardLikeButtonClick(evt));
   }
 
   createCardElement() {
@@ -27,13 +24,8 @@ export class Card {
       .querySelector(this._templateSelector).content
       .querySelector('.card').cloneNode(true);
     const image = this._cardElement.querySelector('.card__image')
-    image.style.backgroundImage = this._buildImageURL(this._link);
-    image.addEventListener('click', () => openPopupViewCard(this));
-    this._cardElement.querySelector('.card__subscript').textContent = this._name;
-    this._cardElement.querySelector('.card__remove-button')
-      .addEventListener('click', evt => this._handleCardRemoveButtonClick(evt));
-    this._cardElement.querySelector('.card__like-button')
-      .addEventListener('click', evt => this._handleCardLikeButtonClick(evt));
+    image.style.backgroundImage = this._buildImageURL(this._data.link);
+    this._addEventListeners(image);
     return this._cardElement;
   }
 
@@ -51,9 +43,8 @@ export class Card {
 
   _removeCardCompletely() {
     this._cardElement.remove();
-    setEmptyIndicator();
-    // Раз мы удалили карточку из DOM, зачем нам теперь экземпляр класса Card?
-    removeCardInstance(this);
+    this._cardElement = null;
+    this._external.setEmptyIndicator();
   }
 
   _handleCardLikeButtonClick(evt) {

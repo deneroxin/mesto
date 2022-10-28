@@ -4,6 +4,7 @@ export class FormValidator {
     this._formElement = formElement;
     this._inputList = Array.from(formElement.querySelectorAll(validationObject.inputSelector));
     this._submitButton = formElement.querySelector(validationObject.submitButtonSelector);
+    this.submitted = true;  //Будем использовать это св-во извне, чтобы сохранять текст при досрочном закрытии попапа
   }
 
   _showInputError(inputElement) {
@@ -34,7 +35,7 @@ export class FormValidator {
     return this._inputList.every(inputElement => inputElement.checkValidity());
   }
 
-  setSubmitButtonState() {
+  _setSubmitButtonState() {
     if (this._isInputListValid()) {
       this._activateSubmitButton();
     } else {
@@ -50,15 +51,22 @@ export class FormValidator {
     }
   }
 
-  validateAllInputs() {
-    this._inputList.forEach(inputElement => this._validateInput(inputElement));
+  resetValidation() {
+    this._inputList.forEach(inputElement => {
+      if (inputElement.value === '') {
+        this._hideInputError(inputElement);
+      } else {
+        this._validateInput(inputElement);
+      }
+    });
+    this._setSubmitButtonState();
   }
 
   enableValidation() {
     this._inputList.forEach(inputElement =>
       inputElement.addEventListener('input', () => {
         this._validateInput(inputElement);
-        this.setSubmitButtonState();
+        this._setSubmitButtonState();
       })
     );
   }
