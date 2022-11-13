@@ -1,17 +1,20 @@
-export class Card {
-  constructor(data, templateSelector, externalObjects) {
-    this._templateSelector = templateSelector;
+export default class Card {
+  constructor(data, templateSelector, callbacks, fallbackImage) {
+    this._cardTemplate =
+      document.querySelector(templateSelector)
+      .content.querySelector('.card');
     this._data = data;
     this._isLiked = false;
-    this._external = externalObjects;
+    this._callbacks = callbacks;
+    this._fallbackImage = fallbackImage;
   }
 
   _buildImageURL(link)  {
-    return `url(${link}), url(${this._external.noImage})`;
+    return `url(${link}), url(${this._fallbackImage})`;
   }
 
   _addEventListeners(image) {
-    image.addEventListener('click', () => this._external.handleCardClick(this._data));
+    image.addEventListener('click', () => this._callbacks.handleCardClick(this._data));
     this._cardElement.querySelector('.card__subscript').textContent = this._data.name;
     this._cardElement.querySelector('.card__remove-button')
       .addEventListener('click', evt => this._handleCardRemoveButtonClick(evt));
@@ -20,10 +23,8 @@ export class Card {
   }
 
   createCardElement() {
-    this._cardElement = document
-      .querySelector(this._templateSelector).content
-      .querySelector('.card').cloneNode(true);
-    const image = this._cardElement.querySelector('.card__image')
+    this._cardElement = this._cardTemplate.cloneNode(true);
+    const image = this._cardElement.querySelector('.card__image');
     image.style.backgroundImage = this._buildImageURL(this._data.link);
     this._addEventListeners(image);
     return this._cardElement;
@@ -42,9 +43,8 @@ export class Card {
   }
 
   _removeCardCompletely() {
-    this._cardElement.remove();
+    this._callbacks.removeItem(this._cardElement);
     this._cardElement = null;
-    this._external.setEmptyIndicator();
   }
 
   _handleCardLikeButtonClick(evt) {

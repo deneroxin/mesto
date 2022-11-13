@@ -5,17 +5,21 @@
       <title>Место</title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <base target="_blank">
-      <link rel="stylesheet" href="pages/index.css">
+      <!-- <link rel="stylesheet" href="pages/index.css"> -->
   </head>
 
   <body class="background">
     <div class="page">
       <header class="header">
-        <img class="header__logo" src="blocks/header/__logo/header__logo_color_white.svg" alt="лого">
+        <img class="header__logo"
+          src="<%=require('./blocks/header/__logo/header__logo_color_white.svg')%>"
+          alt="лого">
       </header>
       <main>
         <section class="profile" aria-label="Профиль">
-          <img class="profile__photo" src="blocks/profile/__photo/jack-eve-custo.jpg" alt="фото">
+          <img class="profile__photo"
+            src="<%=require('./blocks/profile/__photo/jack-eve-custo.jpg')%>"
+            alt="фото">
           <div class="profile__text-container">
             <div class="profile__name-container">
               <h1 class="profile__name">Жак-Ив Кусто</h1>
@@ -27,10 +31,10 @@
         </section>
         <section class="elements" aria-label="Места">
           <ul class="elements__cards">
-
+            <img class="elements__empty-indicator elements__empty-indicator_hidden"
+              src="<%=require('./blocks/elements/__empty-indicator/elements__empty-indicator.jpg')%>"
+              alt="Нет карточек">
           </ul>
-          <img class="elements__empty-indicator elements__empty-indicator_hidden"
-            src="./blocks/elements/__empty-indicator/elements__empty-indicator.jpg" alt="Нет карточек">
         </section>
       </main>
       <footer class="footer">
@@ -72,7 +76,7 @@
 
     <div class="popup popup_type_view-card popup-close" hidden>
       <div class="popup__container">
-        <img class="popup__image" src="?" alt="?">
+        <img class="popup__image" src="" alt="">
         <h2 class="popup__subscript"></h2>
         <button type="button" class="interactive popup__close-button popup-close" aria-label="Закрыть просмотр"></button>
       </div>
@@ -90,7 +94,7 @@
       </li>
     </template>
 
-    <script src="scripts/index.js" type="module"></script>
+    <!-- <script src="scripts/index.js" type="module"></script> -->
 
   </body>
 </html>

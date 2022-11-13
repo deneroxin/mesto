@@ -1,10 +1,9 @@
-export class FormValidator {
+export default class FormValidator {
   constructor(validationObject, formElement) {
     this._validationObject = validationObject;
     this._formElement = formElement;
     this._inputList = Array.from(formElement.querySelectorAll(validationObject.inputSelector));
     this._submitButton = formElement.querySelector(validationObject.submitButtonSelector);
-    this.submitted = true;  //Будем использовать это св-во извне, чтобы сохранять текст при досрочном закрытии попапа
   }
 
   _showInputError(inputElement) {
