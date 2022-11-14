@@ -61,12 +61,16 @@ export default class FormValidator {
     this._setSubmitButtonState();
   }
 
-  enableValidation() {
+  _setEventListeners() {
     this._inputList.forEach(inputElement =>
       inputElement.addEventListener('input', () => {
         this._validateInput(inputElement);
         this._setSubmitButtonState();
       })
     );
+  }
+
+  enableValidation() {
+    this._setEventListeners();
   }
 }

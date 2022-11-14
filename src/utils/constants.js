@@ -12,3 +12,12 @@ export const initialCards = [
   { name: 'Байкал',
     link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg' },
 ];
+
+export const validationObject = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input-box',
+  submitButtonSelector: '.popup__save-button',
+  inactiveButtonClass: 'popup__save-button_disabled',
+  inputErrorClass: 'popup__input-box_error',
+  errorClass: 'popup__error_visible'
+};

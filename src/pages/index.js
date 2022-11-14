@@ -1,21 +1,12 @@
 import '../pages/index.css';
-import emptyIndicator from '../blocks/elements/__empty-indicator/elements__empty-indicator.jpg';
-import {initialCards} from './initialCards.js';
-import SectionWithCards from './SectionWithCards.js';
-import Card from './Card.js';
-import PopupWithForm from './PopupWithForm.js';
-import PopupWithImage from './PopupWithImage.js';
-import UserInfo from './UserInfo.js';
-import FormValidator from './FormValidator.js';
-
-const validationObject = {
-  formSelector: '.popup__form',
-  inputSelector: '.popup__input-box',
-  submitButtonSelector: '.popup__save-button',
-  inactiveButtonClass: 'popup__save-button_disabled',
-  inputErrorClass: 'popup__input-box_error',
-  errorClass: 'popup__error_visible'
-};
+import fallbackImage from '../blocks/card/__image/card__image-fallback.jpg';
+import {initialCards, validationObject} from '../utils/constants.js';
+import Section from '../components/Section.js';
+import Card from '../components/Card.js';
+import PopupWithForm from '../components/PopupWithForm.js';
+import PopupWithImage from '../components/PopupWithImage.js';
+import UserInfo from '../components/UserInfo.js';
+import FormValidator from '../components/FormValidator.js';
 
 const popupWithImage = new PopupWithImage (
   '.popup_type_view-card',
@@ -35,7 +26,7 @@ const popupAddCard = new PopupWithForm (
   validationObject
 );
 
-const sectionWithCards = new SectionWithCards (
+const section = new Section (
   {
     items: initialCards,
     renderer: renderCard
@@ -52,9 +43,9 @@ function renderCard(data) {
     'template.card-template',
     {
       handleCardClick: popupWithImage.open.bind(popupWithImage),
-      removeItem: sectionWithCards.removeItem.bind(sectionWithCards)
+      setEmptyIndicator: section.setEmptyIndicator.bind(section)
     },
-    emptyIndicator
+    fallbackImage
   );
   return card.createCardElement();
 }
@@ -65,7 +56,7 @@ function handleEditProfileFormSubmit(inputValues) {
 }
 
 function handleAddCardFormSubmit(inputValues) {
-  sectionWithCards.addItem(renderCard(inputValues));
+  section.addItem(renderCard(inputValues));
   this.close(true);
 }
 
@@ -92,7 +83,6 @@ function enableValidation(validationObject) {
   return formValidators;
 }
 
-
 const profileSection = document.querySelector('.profile');
 profileSection.querySelector('.profile__edit-button')
   .addEventListener('click', handleProfileEditButtonClick);
@@ -102,5 +92,5 @@ profileSection.querySelector('.profile__add-button')
 popupWithImage.setEventListeners();
 popupEditProfile.setEventListeners();
 popupAddCard.setEventListeners();
-sectionWithCards.renderItems();
+section.renderItems();
 const formValidators = enableValidation(validationObject);

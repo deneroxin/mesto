@@ -13,8 +13,9 @@ export default class Card {
     return `url(${link}), url(${this._fallbackImage})`;
   }
 
-  _addEventListeners(image) {
-    image.addEventListener('click', () => this._callbacks.handleCardClick(this._data));
+  _addEventListeners(imageElement) {
+    imageElement.addEventListener('click', () =>
+      this._callbacks.handleCardClick(this._data));
     this._cardElement.querySelector('.card__subscript').textContent = this._data.name;
     this._cardElement.querySelector('.card__remove-button')
       .addEventListener('click', evt => this._handleCardRemoveButtonClick(evt));
@@ -24,9 +25,9 @@ export default class Card {
 
   createCardElement() {
     this._cardElement = this._cardTemplate.cloneNode(true);
-    const image = this._cardElement.querySelector('.card__image');
-    image.style.backgroundImage = this._buildImageURL(this._data.link);
-    this._addEventListeners(image);
+    const imageElement = this._cardElement.querySelector('.card__image');
+    imageElement.style.backgroundImage = this._buildImageURL(this._data.link);
+    this._addEventListeners(imageElement);
     return this._cardElement;
   }
 
@@ -43,7 +44,8 @@ export default class Card {
   }
 
   _removeCardCompletely() {
-    this._callbacks.removeItem(this._cardElement);
+    this._cardElement.remove();
+    this._callbacks.setEmptyIndicator();
     this._cardElement = null;
   }
 

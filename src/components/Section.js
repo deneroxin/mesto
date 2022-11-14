@@ -1,13 +1,13 @@
-import Section from './Section.js';
-
-export default class SectionWithCards extends Section {
-  constructor(externalObject, containerSelector, emptyIndicatorClass) {
-    super(externalObject, containerSelector);
+export default class Section {
+  constructor({items, renderer}, containerSelector, emptyIndicatorClass) {
+    this._items = items;
+    this._renderer = renderer;
+    this._container = document.querySelector(containerSelector);
     this._emptyIndicatorElement = this._container.querySelector(`.${emptyIndicatorClass}`);
     this._emptyIndicatorHiddenClass = `${emptyIndicatorClass}_hidden`;
   }
 
-  _setEmptyIndicator() {
+  setEmptyIndicator() {
     if (this._container.children.length == 1) {
       this._emptyIndicatorElement.classList.remove(this._emptyIndicatorHiddenClass);
     }
@@ -21,11 +21,13 @@ export default class SectionWithCards extends Section {
 
   addItem(element) {
     this._clearEmptyIndicator();
-    super.addItem(element);
+    this._container.prepend(element);
   }
 
-  removeItem(element) {
-    element.remove();
-    this._setEmptyIndicator();
+  renderItems() {
+    this._items.forEach(item => {
+      const element = this._renderer(item);
+      this.addItem(element);
+    });
   }
 }
