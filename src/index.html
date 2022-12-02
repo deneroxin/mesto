@@ -9,7 +9,7 @@
       <!-- bemster: IGNORE         card-template            footer               place-link-error
            place-name-error        popup-close              popup_type_add-card  popup_type_change-avatar
            popup_type_delete-card  popup_type_edit-profile  profile-about-error  profile-name-error
-           form_type_no-inputs
+           popup__form_no-inputs
       -->
   </head>
 
@@ -104,7 +104,7 @@
     <div class="popup popup_type_delete-card popup-close" hidden>
       <div class="popup__container popup__container_type_dialog">
         <h2 class="popup__title">Вы уверены?</h2>
-        <form class="popup__form form_type_no-inputs" name="delete-card" novalidate>
+        <form class="popup__form popup__form_no-inputs" name="delete-card" novalidate>
           <button type="submit" class="interactive popup__confirm-button" data-ux="Удаление">Да</button>
           <span class="popup__server-error"></span>
         </form>
