@@ -1,4 +1,5 @@
 .card__subscript {
+  grid-area: subscript;
   margin: 0;
   line-height: 29px;
   font-size: 24px;

@@ -1,8 +1,7 @@
 .card__like-button {
+  grid-area: like-button;
   width: 22px;
   height: 19px;
-  flex-grow: 0;
-  flex-shrink: 0;
   background: transparent url(./card__like-button.svg);
   border: none;
 }

@@ -1,0 +1,25 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "synchronize",
+      "type": "shell",
+      "command": "python bemster.py s"
+    },
+    {
+      "label": "create",
+      "type": "shell",
+      "command": "python bemster.py c"
+    },
+    {
+      "label": "rename",
+      "type": "shell",
+      "command": "python bemster.py r"
+    },
+    {
+      "label": "wipe",
+      "type": "shell",
+      "command": "python bemster.py w"
+    }
+  ]
+}

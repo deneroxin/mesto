@@ -1,4 +1,4 @@
-.popup__save-button_disabled, .popup__save-button_disabled:hover {
+.popup__confirm-button_disabled, .popup__confirm-button_disabled:hover {
   background-color: transparent;
   color: var(--color-text-dark);
   border: 1px solid var(--color-text-dark);

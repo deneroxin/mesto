@@ -1,6 +1,5 @@
 export default class Section {
-  constructor({items, renderer}, containerSelector, emptyIndicatorClass) {
-    this._items = items;
+  constructor({renderer}, containerSelector, emptyIndicatorClass) {
     this._renderer = renderer;
     this._container = document.querySelector(containerSelector);
     this._emptyIndicatorElement = this._container.querySelector(`.${emptyIndicatorClass}`);
@@ -19,15 +18,19 @@ export default class Section {
     }
   }
 
-  addItem(element) {
+  addItem(element, isNew = true) {
     this._clearEmptyIndicator();
-    this._container.prepend(element);
+    if (isNew) this._container.prepend(element);
+      else this._container.append(element);
   }
 
-  renderItems() {
-    this._items.forEach(item => {
-      const element = this._renderer(item);
-      this.addItem(element);
+  renderItems(cards) {
+    if (!cards) return;
+    this._clearEmptyIndicator();
+    cards.forEach(card => {
+      const element = this._renderer(card);
+      this.addItem(element, false);
     });
+    this.setEmptyIndicator();
   }
 }

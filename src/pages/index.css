@@ -11,7 +11,7 @@
 @import url(../blocks/header/__logo/header__logo.css);
 
 @import url(../blocks/profile/profile.css);
-@import url(../blocks/profile/__photo/profile__photo.css);
+@import url(../blocks/profile/__avatar/profile__avatar.css);
 @import url(../blocks/profile/__text-container/profile__text-container.css);
 @import url(../blocks/profile/__name-container/profile__name-container.css);
 @import url(../blocks/profile/__name/profile__name.css);
@@ -23,10 +23,12 @@
 @import url(../blocks/card/_removed/card_removed.css);
 @import url(../blocks/card/__image/card__image.css);
 @import url(../blocks/card/__remove-button/card__remove-button.css);
+@import url(../blocks/card/__remove-button/_visible/card__remove-button_visible.css);
 @import url(../blocks/card/__footer/card__footer.css);
 @import url(../blocks/card/__subscript/card__subscript.css);
 @import url(../blocks/card/__like-button/card__like-button.css);
 @import url(../blocks/card/__like-button/_active/card__like-button_active.css);
+@import url(../blocks/card/__num-likes/card__num-likes.css);
 
 @import url(../blocks/elements/elements.css);
 @import url(../blocks/elements/__cards/elements__cards.css);
@@ -46,8 +48,10 @@
 @import url(../blocks/popup/__input-box/_error/popup__input-box_error.css);
 @import url(../blocks/popup/__error/popup__error.css);
 @import url(../blocks/popup/__error/_visible/popup__error_visible.css);
-@import url(../blocks/popup/__save-button/popup__save-button.css);
-@import url(../blocks/popup/__save-button/_disabled/popup__save-button_disabled.css);
+@import url(../blocks/popup/__confirm-button/popup__confirm-button.css);
+@import url(../blocks/popup/__confirm-button/_disabled/popup__confirm-button_disabled.css);
 @import url(../blocks/popup/__close-button/popup__close-button.css);
 @import url(../blocks/popup/__image/popup__image.css);
 @import url(../blocks/popup/__subscript/popup__subscript.css);
+@import url(../blocks/popup/__server-error/popup__server-error.css);
+@import url(../blocks/popup/__server-error/_visible/popup__server-error_visible.css);
