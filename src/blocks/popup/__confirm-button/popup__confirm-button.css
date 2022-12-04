@@ -14,7 +14,7 @@
   opacity: 0.8;
 }
 
-.popup__form_no-inputs .popup__confirm-button {
+.popup_type_confirmation .popup__confirm-button {
   margin-top: -10px;
 }
 

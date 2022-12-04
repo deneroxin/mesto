@@ -4,6 +4,7 @@ import {validationObject} from '../utils/constants.js';
 import Section from '../components/Section.js';
 import Card from '../components/Card.js';
 import PopupWithForm from '../components/PopupWithForm.js';
+import PopupConfirmation from '../components/PopupConfirmation.js';
 import PopupWithImage from '../components/PopupWithImage.js';
 import UserInfo from '../components/UserInfo.js';
 import Api from '../components/Api.js';
@@ -32,7 +33,20 @@ function handleCardLike() {
   api.likeCard(!this._isLiked, this.getCardID())
   .then(updatedCard => {
     if (updatedCard) this._updateLikeStatus(updatedCard.likes);
+  })
+  .catch(err => {
+    console.log(`Api.likeCard() failed with: ${err.message}`);
   });
+}
+
+function wrapRequestInUX(requestPromise, popupElement) {
+  popupElement.showRequestStatusText();
+  return requestPromise
+    .then(
+      result => { popupElement.close(true); return result; },
+      popupElement.showServerError.bind(popupElement)
+    )
+    .finally(() => popupElement.restoreOriginalText());
 }
 
 const popups = {};
@@ -56,6 +70,7 @@ const section = new Section (
   {
     renderer: renderCard
   },
+  '.elements',
   '.elements__cards',
   'elements__empty-indicator'
 );
@@ -69,15 +84,17 @@ Promise.all([api.getUserInfo(), api.getInitialCards()])
       return (a.name < b.name ? -1 : (b.name < a.name) ? 1 : 0);
     });
     section.renderItems(initialCards);
+  })
+  .catch(() => {
+    document.querySelector('.profile').style.display = 'none';
+    section.renderItems([]);
   });
 
 popups.editProfile = new PopupWithForm (
   '.popup_type_edit-profile',
   {
     handleFormSubmit: (inputValues) => {
-      popups.editProfile.wrapRequestInUX(
-        api.editProfile(inputValues)
-      )
+      wrapRequestInUX(api.editProfile(inputValues), popups.editProfile)
       .then(userInfo.setUserInfo.bind(userInfo));
     },
     validationObject
@@ -88,9 +105,7 @@ popups.addCard = new PopupWithForm (
   '.popup_type_add-card',
   {
     handleFormSubmit: (inputValues) => {
-      popups.addCard.wrapRequestInUX(
-        api.addNewCard(inputValues)
-      )
+      wrapRequestInUX(api.addNewCard(inputValues), popups.addCard)
       .then(newCardData => {
         if (newCardData) section.addItem(renderCard(newCardData));
       });
@@ -99,19 +114,21 @@ popups.addCard = new PopupWithForm (
   }
 );
 
-popups.deleteCard = new PopupWithForm (
-  '.popup_type_delete-card',
+popups.deleteCard = new PopupConfirmation (
+  '.popup_type_confirmation',
+  '.popup__confirm-button',
   {
-    handleFormSubmit: () => {
+    handleConfirm: () => {
       const targetCard = popups.deleteCard.getOrigin();
-      popups.deleteCard.wrapRequestInUX(
-        api.removeCard(targetCard.getCardID())
+      wrapRequestInUX(
+        api.removeCard(targetCard.getCardID()),
+        popups.deleteCard
       )
       .then(res => {
         if (res) targetCard.removeCardElement();
       });
     },
-    validationObject
+    serverErrorSelectors: validationObject
   }
 );
 
@@ -119,8 +136,9 @@ popups.setAvatar = new PopupWithForm (
   '.popup_type_change-avatar',
   {
     handleFormSubmit: () => {
-      popups.setAvatar.wrapRequestInUX(
-        api.setAvatar(popups.setAvatar.getInputValues().avatar)
+      wrapRequestInUX(
+        api.setAvatar(popups.setAvatar.getInputValues().avatar),
+        popups.setAvatar
       )
       .then(res => {
         if (res) userInfo.setAvatar(res.avatar);
@@ -150,6 +168,5 @@ profileSection.querySelector('.profile__add-button')
   });
 profileSection.querySelector('.profile__avatar')
   .addEventListener('click', () => {
-    popups.setAvatar.setInputValues(userInfo.getUserInfo());
     popups.setAvatar.open();
   });

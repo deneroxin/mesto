@@ -23,15 +23,10 @@ export default class Popup {
     });
   }
 
-  open(origin) {
-    if (origin) this._origin = origin;
+  open() {
     this._mousePushedOnOverlay = false;
     this._popupElement.classList.add('popup_opened');
     window.addEventListener('keydown', this._handleEsc);
-  }
-
-  getOrigin() {
-    return this._origin;
   }
 
   close() {

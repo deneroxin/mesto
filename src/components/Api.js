@@ -20,6 +20,7 @@ export default class Api {
     .then(this._getData)
     .catch(err => {
       console.log(`Api.getUserInfo() failed with: ${err.message}`);
+      throw err;
     });
   }
 
@@ -30,7 +31,8 @@ export default class Api {
     })
     .then(this._getData)
     .catch(err => {
-      console.log(`Api.getInitialCards() failed with: ${err.message}`);
+      console.log(`Api.getInitialCards() failed with: ${err.message}; empty array returned`);
+      return [];
     });
   }
 
@@ -65,10 +67,7 @@ export default class Api {
       method: isLiked ? 'PUT' : 'DELETE',
       headers: this._getHeaders
     })
-    .then(this._getData)
-    .catch(err => {
-      console.log(`Api.likeCard() failed with: ${err.message}`);
-    });
+    .then(this._getData);
   }
 
   setAvatar(url) {

@@ -1,19 +1,20 @@
 export default class Section {
-  constructor({renderer}, containerSelector, emptyIndicatorClass) {
+  constructor({renderer}, sectionSelector, containerSelector, emptyIndicatorClass) {
     this._renderer = renderer;
-    this._container = document.querySelector(containerSelector);
-    this._emptyIndicatorElement = this._container.querySelector(`.${emptyIndicatorClass}`);
+    const section = document.querySelector(sectionSelector);
+    this._container = section.querySelector(containerSelector);
+    this._emptyIndicatorElement = section.querySelector(`.${emptyIndicatorClass}`);
     this._emptyIndicatorHiddenClass = `${emptyIndicatorClass}_hidden`;
   }
 
   setEmptyIndicator() {
-    if (this._container.children.length == 1) {
+    if (this._container.children.length == 0) {
       this._emptyIndicatorElement.classList.remove(this._emptyIndicatorHiddenClass);
     }
   }
 
   _clearEmptyIndicator() {
-    if (this._container.children.length == 1) {
+    if (this._container.children.length == 0) {
       this._emptyIndicatorElement.classList.add(this._emptyIndicatorHiddenClass);
     }
   }
@@ -26,7 +27,6 @@ export default class Section {
 
   renderItems(cards) {
     if (!cards) return;
-    this._clearEmptyIndicator();
     cards.forEach(card => {
       const element = this._renderer(card);
       this.addItem(element, false);
