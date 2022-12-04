@@ -55,3 +55,4 @@
 @import url(../blocks/popup/__subscript/popup__subscript.css);
 @import url(../blocks/popup/__server-error/popup__server-error.css);
 @import url(../blocks/popup/__server-error/_visible/popup__server-error_visible.css);
+@import url(../blocks/profile/_hidden/profile_hidden.css);
