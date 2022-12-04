@@ -47,4 +47,5 @@
 .popup__subscript{bottom:-25px;color:var(--color-text-bright);font-size:12px;font-weight:400;left:0;line-height:15px;margin:0;position:absolute}
 .popup__server-error{color:blue;display:none;font-size:14px;font-weight:700;line-height:14px;margin-top:6px;text-align:center}
 .popup__server-error_visible{display:block}
+.profile_hidden{display:none}
 
