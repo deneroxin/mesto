@@ -18,7 +18,11 @@ export default class Card {
     return this._data._id;
   }
 
-  _updateLikeStatus(updatedLikes) {
+  getLikeStatus() {
+    return this._isLiked;
+  }
+
+  updateLikeStatus(updatedLikes) {
     if (updatedLikes) this._data.likes = updatedLikes;
     this._numLikesElement.textContent = this._data.likes.length;
     this._isLiked = this._data.likes.some(user => user._id == Card._myID);
@@ -52,7 +56,7 @@ export default class Card {
     const removeButtonElement = this._cardElement.querySelector('.card__remove-button');
     if (this._data.owner._id == Card._myID)
       removeButtonElement.classList.add('card__remove-button_visible');
-    this._updateLikeStatus();
+    this.updateLikeStatus();
     this._addEventListeners(imageElement, removeButtonElement);
     return this._cardElement;
   }

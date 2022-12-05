@@ -5,6 +5,9 @@ export default class PopupConfirmation extends PopupSendingRequest {
     super(popupSelector, confirmButtonSelector, serverErrorSelectors);
     this._handleConfirm = handleConfirm;
     this._confirmButtonElement = this._popupElement.querySelector(confirmButtonSelector);
+    this._handleKeypress = (evt) => {
+      if (evt.key == 'Enter') this._handleConfirm();
+    }
   }
 
   setEventListeners() {
@@ -15,7 +18,7 @@ export default class PopupConfirmation extends PopupSendingRequest {
   open(origin) {
     super.open();
     this._origin = origin;
-    window.addEventListener('keydown', this._handleConfirm);
+    window.addEventListener('keydown', this._handleKeypress);
   }
 
   getOrigin() {
@@ -24,6 +27,6 @@ export default class PopupConfirmation extends PopupSendingRequest {
 
   close() {
     super.close();
-    window.removeEventListener('keydown', this._handleConfirm);
+    window.removeEventListener('keydown', this._handleKeypress);
   }
 }

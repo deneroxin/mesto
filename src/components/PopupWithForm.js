@@ -1,15 +1,12 @@
 import PopupSendingRequest from './PopupSendingRequest.js';
-import FormValidator from './FormValidator.js';
 
 export default class PopupWithForm extends PopupSendingRequest {
-  constructor(popupSelector, {handleFormSubmit, validationObject}) {
-    super(popupSelector, validationObject.submitButtonSelector, validationObject);
+  constructor(popupSelector, {handleFormSubmit, formSelectors}) {
+    super(popupSelector, formSelectors.submitButtonSelector, formSelectors);
     this._handleFormSubmit = handleFormSubmit;
-    this._formElement = this._popupElement.querySelector(validationObject.formSelector);
-    this._inputList = Array.from(this._formElement.querySelectorAll(validationObject.inputSelector));
-    this._submitButton = this._formElement.querySelector(validationObject.submitButtonSelector);
-    this._formValidator = new FormValidator(validationObject, this._formElement);
-    this._formValidator.enableValidation();
+    this._formElement = this._popupElement.querySelector(formSelectors.formSelector);
+    this._inputList = Array.from(this._formElement.querySelectorAll(formSelectors.inputSelector));
+    this._submitButton = this._formElement.querySelector(formSelectors.submitButtonSelector);
   }
 
   setEventListeners() {
@@ -32,11 +29,6 @@ export default class PopupWithForm extends PopupSendingRequest {
     this._inputList.forEach(inputElement => {
       inputElement.value = data[inputElement.getAttribute("name")];
     });
-  }
-
-  open() {
-    if (this._formValidator) this._formValidator.resetValidation();
-    super.open();
   }
 
   close(submitted = false) {
